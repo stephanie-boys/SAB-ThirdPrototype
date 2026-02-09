@@ -1,0 +1,65 @@
+[gd_scene load_steps=13 format=3 uid="uid://bk6u250yhdqfa"]
+
+[ext_resource type="Texture2D" uid="uid://diwejmx5akdh4" path="res://icon.svg" id="1_4flbx"]
+[ext_resource type="Script" uid="uid://dt4tvwqh7fjer" path="res://sprite_2d.gd" id="2_onrkg"]
+[ext_resource type="AudioStream" uid="uid://h7jwkyig7217" path="res://addons/kenney_sci_fi_audio/forceField_000.ogg" id="3_1jxqw"]
+[ext_resource type="AudioStream" uid="uid://bwrkmgl3f2cqg" path="res://addons/kenney_sci_fi_audio/forceField_001.ogg" id="4_dw050"]
+[ext_resource type="AudioStream" uid="uid://dusj4lsgs73pv" path="res://addons/kenney_sci_fi_audio/forceField_002.ogg" id="5_b26j0"]
+[ext_resource type="AudioStream" uid="uid://ukae8jrgci45" path="res://addons/kenney_sci_fi_audio/forceField_003.ogg" id="6_n7ghd"]
+[ext_resource type="AudioStream" uid="uid://ur8ocwh7u63j" path="res://addons/kenney_sci_fi_audio/forceField_004.ogg" id="7_nvl01"]
+
+[sub_resource type="Gradient" id="Gradient_onrkg"]
+offsets = PackedFloat32Array(0.09547739, 0.3517588)
+colors = PackedColorArray(0.2562193, 0.957647, 0.9904241, 0.5882353, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_i3pqv"]
+gradient = SubResource("Gradient_onrkg")
+width = 50
+height = 50
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_hqtel"]
+particle_flag_disable_z = true
+emission_shape = 3
+emission_box_extents = Vector3(20, 20, 1)
+direction = Vector3(0, -1, 0)
+initial_velocity_min = 3.0
+initial_velocity_max = 10.0
+radial_velocity_min = -2.2351742e-05
+radial_velocity_max = 296.64996
+gravity = Vector3(0, -10, 0)
+
+[sub_resource type="GDScript" id="GDScript_onrkg"]
+script/source = "extends GPUParticles2D
+"
+
+[sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_ivps1"]
+random_pitch = 1.54
+streams_count = 5
+stream_0/stream = ExtResource("3_1jxqw")
+stream_1/stream = ExtResource("4_dw050")
+stream_2/stream = ExtResource("5_b26j0")
+stream_3/stream = ExtResource("6_n7ghd")
+stream_4/stream = ExtResource("7_nvl01")
+
+[node name="Player" type="Node2D"]
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(542, 331)
+texture = ExtResource("1_4flbx")
+script = ExtResource("2_onrkg")
+
+[node name="GPUParticles2D" type="GPUParticles2D" parent="Sprite2D"]
+position = Vector2(2, 4)
+emitting = false
+amount = 20
+texture = SubResource("GradientTexture2D_i3pqv")
+lifetime = 0.25
+one_shot = true
+process_material = SubResource("ParticleProcessMaterial_hqtel")
+script = SubResource("GDScript_onrkg")
+
+[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="Sprite2D"]
+stream = SubResource("AudioStreamRandomizer_ivps1")
+volume_db = 5.253
